@@ -1851,6 +1851,14 @@
   "resolved" "https://registry.npmjs.org/@types/history/-/history-4.7.9.tgz"
   "version" "4.7.9"
 
+"@types/hoist-non-react-statics@*":
+  "integrity" "sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA=="
+  "resolved" "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz"
+  "version" "3.3.1"
+  dependencies:
+    "@types/react" "*"
+    "hoist-non-react-statics" "^3.3.0"
+
 "@types/html-minifier-terser@^5.0.0":
   "integrity" "sha512-giAlZwstKbmvMk1OO7WXSj4OZ0keXAcl2TQq4LWHiiPH2ByaH7WeUzng+Qej8UPxxv+8lRTuouo0iaNDBuzIBA=="
   "resolved" "https://registry.npmjs.org/@types/html-minifier-terser/-/html-minifier-terser-5.1.1.tgz"
@@ -1995,6 +2003,15 @@
   "integrity" "sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw=="
   "resolved" "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.0.tgz"
   "version" "2.0.0"
+
+"@types/styled-components@^5.1.14":
+  "integrity" "sha512-d6P1/tyNytqKwam3cQXq7a9uPtovc/mdAs7dBiz1YbDdNIT3X4WmuFU78YdSYh84TXVuhOwezZ3EeKuNBhwsHQ=="
+  "resolved" "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.14.tgz"
+  "version" "5.1.14"
+  dependencies:
+    "@types/hoist-non-react-statics" "*"
+    "@types/react" "*"
+    "csstype" "^3.0.2"
 
 "@types/tapable@*", "@types/tapable@^1.0.5":
   "integrity" "sha512-W+bw9ds02rAQaMvaLYxAbJ6cvguW/iJXNT6lTssS1ps6QdrMKttqEAMEG/b5CR8TZl3/L7/lH0ZV5nNR1LXikA=="
@@ -5826,7 +5843,7 @@
     "minimalistic-assert" "^1.0.0"
     "minimalistic-crypto-utils" "^1.0.1"
 
-"hoist-non-react-statics@^3.0.0", "hoist-non-react-statics@^3.1.0", "hoist-non-react-statics@^3.3.2":
+"hoist-non-react-statics@^3.0.0", "hoist-non-react-statics@^3.1.0", "hoist-non-react-statics@^3.3.0", "hoist-non-react-statics@^3.3.2":
   "integrity" "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="
   "resolved" "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   "version" "3.3.2"
@@ -10957,7 +10974,7 @@
     "loader-utils" "^2.0.0"
     "schema-utils" "^2.7.0"
 
-"styled-components@^5.3.1", "styled-components@>= 2":
+"styled-components@^5.3.1", "styled-components@>= 2", "styled-components@>=4.0.0 || >=5.0.0":
   "integrity" "sha512-JThv2JRzyH0NOIURrk9iskdxMSAAtCfj/b2Sf1WJaCUsloQkblepy1jaCLX/bYE+mhYo3unmwVSI9I5d9ncSiQ=="
   "resolved" "https://registry.npmjs.org/styled-components/-/styled-components-5.3.1.tgz"
   "version" "5.3.1"
@@ -10972,6 +10989,11 @@
     "hoist-non-react-statics" "^3.0.0"
     "shallowequal" "^1.1.0"
     "supports-color" "^5.5.0"
+
+"styled-reset@^4.3.4":
+  "integrity" "sha512-1UmkWmRwSPfzolKleyPjbZdBqkxSXv5ImqTP5WeSjWk0Z7IvEzsrYhrqinZfCg10eM1P6BEtFly8+puQJnN/0A=="
+  "resolved" "https://registry.npmjs.org/styled-reset/-/styled-reset-4.3.4.tgz"
+  "version" "4.3.4"
 
 "stylehacks@^4.0.0":
   "integrity" "sha512-7GlLk9JwlElY4Y6a/rmbH2MhVlTyVmiJd1PfTCqFaIBEGMYNsrO/v3SeGTdhBThLg4Z+NbOk/qFMwCa+J+3p/g=="
