@@ -1,25 +1,24 @@
 import styled from "styled-components";
 
-type Props = {
-  type: string;
-  placeholder: string;
-};
+interface SInput {
+  hasError?: boolean;
+}
 
-const SInput = styled.input`
+const Input = styled.input<SInput>`
   width: 100%;
   border-radius: 3px;
   padding: 7px;
   background-color: #fafafa;
-  border: 0.5px solid ${(props) => props.theme.borderColor};
+  border: 0.5px solid
+    ${(props) => (props.hasError ? "tomato" : props.theme.borderColor)};
   margin-top: 5px;
   box-sizing: border-box;
   &::placeholder {
     font-size: 12px;
   }
+  &:focus {
+    border-color: rgb(38, 38, 38);
+  }
 `;
-
-function Input(props: Props) {
-  return <SInput {...props} />;
-}
 
 export default Input;

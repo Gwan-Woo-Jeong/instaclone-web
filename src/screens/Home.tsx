@@ -1,14 +1,10 @@
-import { useReactiveVar } from "@apollo/client";
-import { isLoggedInVar } from "../apollo";
+import { logUserOut } from "../apollo";
 
 function Home() {
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
   return (
     <>
-      <h1>Home</h1>
-      <button onClick={() => isLoggedInVar(!isLoggedIn)}>
-        {isLoggedInVar() ? "log out" : "log in"}
-      </button>
+      <h1>Welcome we did it!</h1>
+      <button onClick={() => logUserOut()}>Log out now!</button>
     </>
   );
 }

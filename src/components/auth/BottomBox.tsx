@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BaseBox } from "../shared";
+import PropTypes from "prop-types";
 
 type Props = {
   cta: string;
@@ -26,5 +27,11 @@ function BottomBox({ cta, link, linkText }: Props) {
     </SBottomBox>
   );
 }
+
+BottomBox.propTypes = {
+  cta: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired,
+};
 
 export default BottomBox;

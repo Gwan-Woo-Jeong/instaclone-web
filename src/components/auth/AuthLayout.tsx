@@ -18,7 +18,6 @@ const Wrapper = styled.div`
 `;
 
 function AuthLayout({ children }: Props) {
-  console.log(children);
   return (
     <Container>
       <Wrapper>{children}</Wrapper>
