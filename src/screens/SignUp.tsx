@@ -11,7 +11,7 @@ import { FatLink } from "../components/shared";
 import PageTitle from "../components/PageTitle";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import {
   createAccount,
   createAccountVariables,
@@ -63,13 +63,18 @@ const CREATE_ACCOUNT_MUTATION = gql`
 function SignUp() {
   const history = useHistory();
   const onCompleted = (data: createAccount) => {
+    const { username, password } = getValues();
     const {
       createAccount: { ok, error },
     } = data;
     if (!ok && error) {
       return setError("result", { message: error });
     }
-    history.push(routes.home);
+    history.push(routes.home, {
+      message: "Account Created. Please log in",
+      username,
+      password,
+    });
   };
   const [createAccount, { loading }] = useMutation<
     createAccount,
@@ -77,7 +82,7 @@ function SignUp() {
   >(CREATE_ACCOUNT_MUTATION, {
     onCompleted,
   });
-  const { register, handleSubmit, formState, setError } = useForm({
+  const { register, handleSubmit, formState, setError, getValues } = useForm({
     mode: "onChange",
   });
   const onSubmitValid: SubmitHandler<IForm> = (data) => {
@@ -148,7 +153,5 @@ function SignUp() {
     </AuthLayout>
   );
 }
-
-// Input의 name은 query와 같은게 좋음
 
 export default SignUp;

@@ -8,7 +8,7 @@ import Home from "./screens/Home";
 import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 import SignUp from "./screens/SignUp";
-import { GlobalStyles, lightTheme } from "./screens/styles";
+import { darkTheme, GlobalStyles, lightTheme } from "./screens/styles";
 
 function App() {
   const darkMode = useReactiveVar(darkModeVar);
@@ -17,7 +17,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <GlobalStyles />
           <Router>
             <Switch>
