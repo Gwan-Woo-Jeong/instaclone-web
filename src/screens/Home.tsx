@@ -14,7 +14,17 @@ export const FEED_QUERY = gql`
       file
       caption
       likes
-      comments
+      comments {
+        id
+        user {
+          username
+          avatar
+        }
+        payload
+        isMine
+        createdAt
+      }
+      commentNumber
       createdAt
       isMine
       isLiked
@@ -28,16 +38,7 @@ function Home() {
     <div>
       <PageTitle title="Home" />
       {data?.seeFeed?.map((photo) => (
-        <Photo
-          key={photo!.id}
-          id={photo!.id}
-          user={photo!.user}
-          file={photo!.file}
-          likes={photo!.likes}
-          isLiked={photo!.isLiked}
-          caption={photo!.caption}
-          comments={photo!.comments}
-        />
+        <Photo key={photo!.id} {...photo!} />
       ))}
     </div>
   );

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
   faBookmark,
   faComment,
@@ -15,6 +14,8 @@ import {
   toggleLike,
   toggleLikeVariables,
 } from "../../__generated__/toggleLike";
+import { seeFeed_seeFeed } from "../../__generated__/seeFeed";
+import Comments from "./Comments";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -76,48 +77,38 @@ const Likes = styled(FatText)`
   display: block;
 `;
 
-const Comments = styled.div`
-  margin-top: 20px;
-`;
-
-const Comment = styled.div``;
-
-const CommentCaption = styled.span`
-  margin-left: 10px;
-`;
-
-interface Props {
-  id: number;
-  user: {
-    avatar: string | null;
-    username: string;
-  };
-  likes: number;
-  isLiked: boolean;
-  file: string;
-  caption: string | null;
-  comments: number;
-}
-
-function Photo({ id, user, likes, isLiked, file, caption, comments }: Props) {
+function Photo({
+  id,
+  user,
+  likes,
+  isLiked,
+  file,
+  caption,
+  commentNumber,
+  comments,
+  isMine,
+}: seeFeed_seeFeed) {
   const updateToggleLike: MutationUpdaterFn<toggleLike> = (cache, result) => {
     const ok = result.data?.toggleLike.ok;
     if (ok) {
-      cache.writeFragment({
-        id: `Photo:${id}`,
-        fragment: gql`
-          fragment AnyName on Photo {
-            isLiked
-            likes
-          }
-        `,
-        data: {
-          isLiked: !isLiked,
-          likes: isLiked ? likes - 1 : likes + 1,
+      const photoId = `Photo:${id}`;
+      cache.modify({
+        id: photoId,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          },
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            }
+            return prev + 1;
+          },
         },
       });
     }
   };
+
   const [toggleLikeMutation, { loading }] = useMutation<
     toggleLike,
     toggleLikeVariables
@@ -125,6 +116,7 @@ function Photo({ id, user, likes, isLiked, file, caption, comments }: Props) {
     variables: { id },
     update: updateToggleLike,
   });
+
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
@@ -153,29 +145,17 @@ function Photo({ id, user, likes, isLiked, file, caption, comments }: Props) {
           </div>
         </PhotoActions>
         <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
-        <Comments>
-          <Comment>
-            <FatText>{user.username}</FatText>
-            <CommentCaption>{caption}</CommentCaption>
-          </Comment>
-          <span>{}</span>
-        </Comments>
+        <Comments
+          photoId={id}
+          author={user.username}
+          caption={caption}
+          commentNumber={commentNumber}
+          comments={comments}
+          isMine={isMine}
+        />
       </PhotoData>
     </PhotoContainer>
   );
 }
-
-Photo.propTypes = {
-  id: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    avatar: PropTypes.string,
-    username: PropTypes.string.isRequired,
-  }),
-  caption: PropTypes.string,
-  likes: PropTypes.number.isRequired,
-  isLiked: PropTypes.bool.isRequired,
-  file: PropTypes.string.isRequired,
-  comments: PropTypes.number.isRequired,
-};
 
 export default Photo;
