@@ -16,6 +16,7 @@ import {
 } from "../../__generated__/toggleLike";
 import { seeFeed_seeFeed } from "../../__generated__/seeFeed";
 import Comments from "./Comments";
+import { Link } from "react-router-dom";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -77,6 +78,10 @@ const Likes = styled(FatText)`
   display: block;
 `;
 
+interface SHeartIcon {
+  isLiked: boolean;
+}
+
 function Photo({
   id,
   user,
@@ -86,7 +91,6 @@ function Photo({
   caption,
   commentNumber,
   comments,
-  isMine,
 }: seeFeed_seeFeed) {
   const updateToggleLike: MutationUpdaterFn<toggleLike> = (cache, result) => {
     const ok = result.data?.toggleLike.ok;
@@ -120,8 +124,12 @@ function Photo({
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
-        <Avatar lg url={user?.avatar} />
-        <Username>{user?.username}</Username>
+        <Link to={`/users/${user?.username}`}>
+          <Avatar lg url={user?.avatar} />
+        </Link>
+        <Link to={`/users/${user?.username}`}>
+          <Username>{user?.username}</Username>
+        </Link>
       </PhotoHeader>
       <PhotoFile src={file} />
       <PhotoData>
@@ -151,7 +159,6 @@ function Photo({
           caption={caption}
           commentNumber={commentNumber}
           comments={comments}
-          isMine={isMine}
         />
       </PhotoData>
     </PhotoContainer>

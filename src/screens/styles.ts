@@ -31,5 +31,6 @@ ${reset}
     }
     a{
       text-decoration: none;
+      color: inherit;
     }
 `;

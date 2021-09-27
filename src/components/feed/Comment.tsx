@@ -23,6 +23,8 @@ const DELETE_COMMENT_MUTATION = gql`
 
 const CommentContainer = styled.div`
   margin-bottom: 7px;
+  display: flex;
+  align-items: center;
 `;
 
 const CommentCaption = styled.span`
@@ -37,8 +39,16 @@ const CommentCaption = styled.span`
   }
 `;
 
-// deleteButton 로그인 유저만 보게 하기
-// isMine 내려주어서 true면 보이게..
+const DeleteButton = styled.button`
+  font-size: 10px;
+  border: none;
+  background-color: transparent;
+  font-weight: 600;
+  color: #bebcbc;
+  padding-top: 2px;
+  cursor: pointer;
+`;
+
 function Comment({ author, payload, id, isMine, photoId }: Props) {
   const updateDeleteComment: MutationUpdaterFn<deleteComment> = (
     cache,
@@ -46,11 +56,8 @@ function Comment({ author, payload, id, isMine, photoId }: Props) {
   ) => {
     const { ok } = result!.data!.deleteComment;
     if (ok) {
-      // 데이터를 cache에서 삭제
-      // comment의 id
       cache.evict({ id: `Comment:${id}` });
       cache.modify({
-        // photo의 id
         id: `Photo:${photoId}`,
         fields: {
           commentNumber(prev) {
@@ -73,7 +80,9 @@ function Comment({ author, payload, id, isMine, photoId }: Props) {
 
   return (
     <CommentContainer>
-      <FatText>{author}</FatText>
+      <Link to={`/users/${author}`}>
+        <FatText>{author}</FatText>
+      </Link>
       <CommentCaption>
         {payload?.split(" ").map((word, index) =>
           /#[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w]+/g.test(word) ? (
@@ -86,13 +95,9 @@ function Comment({ author, payload, id, isMine, photoId }: Props) {
           )
         )}
       </CommentCaption>
-      {isMine && <button onClick={onDeleteClick}>X</button>}
+      {isMine && <DeleteButton onClick={onDeleteClick}>X</DeleteButton>}
     </CommentContainer>
   );
 }
 
 export default Comment;
-
-// photo - comments - comment
-// photo id => =>
-// comment에서 photo 업데이트 가능

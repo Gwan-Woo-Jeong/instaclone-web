@@ -48,7 +48,6 @@ interface Props {
   caption: string | null;
   commentNumber: number;
   comments: (seeFeed_seeFeed_comments | null)[] | null;
-  isMine: Boolean;
 }
 
 interface Iform {
@@ -62,7 +61,6 @@ function Comments({
   commentNumber,
   comments,
   photoId,
-  isMine,
 }: Props) {
   const { data: userData } = useUser();
   const createCommentUpdate: MutationUpdaterFn<createComment> = (
@@ -135,7 +133,7 @@ function Comments({
           id={comment!.id}
           author={comment!.user.username}
           payload={comment!.payload}
-          isMine={isMine}
+          isMine={comment?.isMine}
           photoId={photoId}
         />
       ))}

@@ -8,6 +8,7 @@ import routes from "./routes";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
+import Profile from "./screens/Profile";
 import SignUp from "./screens/SignUp";
 import { darkTheme, GlobalStyles, lightTheme } from "./screens/styles";
 
@@ -15,6 +16,7 @@ function App() {
   const darkMode = useReactiveVar(darkModeVar);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
+  // /:username => username이라는 변수를 알아들음 ":" 중요
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
@@ -36,6 +38,11 @@ function App() {
                   <SignUp />
                 </Route>
               )}
+              <Route path={`/users/:username`}>
+                <Layout>
+                  <Profile />
+                </Layout>
+              </Route>
               <Route>
                 <NotFound />
               </Route>
