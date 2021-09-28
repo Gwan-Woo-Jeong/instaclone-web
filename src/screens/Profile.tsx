@@ -1,17 +1,32 @@
-import { gql, useQuery } from "@apollo/client";
+import {
+  gql,
+  MutationResult,
+  MutationUpdaterFn,
+  useApolloClient,
+  useMutation,
+  useQuery,
+} from "@apollo/client";
 import { useParams } from "react-router";
 import { PHOTO_FRAGMENT } from "./fragments";
 import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import { FatText } from "../components/shared";
-import { seeProfile } from "../__generated__/seeProfile";
+import { seeProfile, seeProfile_seeProfile } from "../__generated__/seeProfile";
+import Button from "../components/auth/Button";
+import PageTitle from "../components/PageTitle";
+import {
+  unfollowUser,
+  unfollowUserVariables,
+} from "../__generated__/unfollowUser";
+import { followUser, followUserVariables } from "../__generated__/followUser";
+import useUser from "../hooks/useUser";
 
 const Header = styled.div`
   display: flex;
 `;
 
-const Avatar = styled.img`
+const ProfileImg = styled.img`
   margin-left: 50px;
   height: 160px;
   width: 160px;
@@ -30,6 +45,7 @@ const Username = styled.h3`
 const Row = styled.div`
   margin-bottom: 20px;
   font-size: 16px;
+  display: flex;
 `;
 
 const List = styled.ul`
@@ -96,6 +112,22 @@ interface bgType {
   bg?: string;
 }
 
+const FOLLOW_USER_MUTATION = gql`
+  mutation followUser($username: String!) {
+    followUser(username: $username) {
+      ok
+    }
+  }
+`;
+
+const UNFOLLOW_USER_MUTATION = gql`
+  mutation unfollowUser($username: String!) {
+    followUser(username: $username) {
+      ok
+    }
+  }
+`;
+
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!) {
     seeProfile(username: $username) {
@@ -116,18 +148,130 @@ const SEE_PROFILE_QUERY = gql`
   ${PHOTO_FRAGMENT}
 `;
 
+const ProfileBtn = styled(Button).attrs({ as: "span" })`
+  margin-left: 10px;
+  margin-top: 0px;
+  padding: 8px 12px;
+  cursor: pointer;
+`;
+
 function Profile() {
   const { username }: paramsType = useParams();
-  const { data } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
+  const { data: userData } = useUser();
+  const client = useApolloClient();
+  const { data, loading } = useQuery<seeProfile>(SEE_PROFILE_QUERY, {
     variables: { username },
   });
+
+  const unfollowUserUpdate: MutationUpdaterFn<unfollowUser> = (
+    cache,
+    result
+  ) => {
+    const { ok } = result.data!.followUser;
+    if (!ok) {
+      return;
+    }
+
+    cache.modify({
+      id: `User:${username}`,
+      fields: {
+        isFollowing(prev) {
+          return false;
+        },
+        totalFollowers(prev) {
+          return prev - 1;
+        },
+      },
+    });
+
+    cache.modify({
+      id: `User:${userData.me.username}`,
+      fields: {
+        totalFollowing(prev) {
+          return prev - 1;
+        },
+      },
+    });
+  };
+
+  const [unfollowUser] = useMutation<unfollowUser, unfollowUserVariables>(
+    UNFOLLOW_USER_MUTATION,
+    {
+      variables: { username },
+      update: unfollowUserUpdate,
+    }
+  );
+
+  const followUserCompleted = (data: followUser) => {
+    const { ok } = data.followUser;
+    if (!ok) {
+      return;
+    }
+    const { cache } = client;
+    cache.modify({
+      id: `User:${username}`,
+      fields: {
+        isFollowing(prev) {
+          return true;
+        },
+        totalFollowers(prev) {
+          return prev + 1;
+        },
+      },
+    });
+
+    cache.modify({
+      id: `User:${userData.me.username}`,
+      fields: {
+        totalFollowing(prev) {
+          return prev + 1;
+        },
+      },
+    });
+  };
+
+  const [followUser] = useMutation<followUser, followUserVariables>(
+    FOLLOW_USER_MUTATION,
+    {
+      variables: { username },
+      onCompleted: followUserCompleted,
+    }
+  );
+
+  const getButton = (seeProfile: seeProfile_seeProfile) => {
+    const { isMe, isFollowing } = seeProfile;
+    if (isMe) {
+      return <ProfileBtn>Edit Profile</ProfileBtn>;
+    }
+    if (isFollowing) {
+      return <ProfileBtn onClick={() => unfollowUser()}>Unfollow</ProfileBtn>;
+    } else {
+      return <ProfileBtn onClick={() => followUser()}>Follow</ProfileBtn>;
+    }
+  };
+
+  const getProfileImg = (seeProfile: seeProfile_seeProfile) => {
+    const { avatar } = seeProfile;
+    if (avatar) {
+      return <ProfileImg src={avatar} />;
+    } else {
+      return <ProfileImg />;
+    }
+  };
+
   return (
     <div>
+      <PageTitle
+        title={
+          loading ? "Loading..." : `${data?.seeProfile?.username}'s Profile`
+        }
+      />
       <Header>
-        <Avatar />
+        {data?.seeProfile && getProfileImg(data.seeProfile)}
         <Column>
           <Row>
             <Username>{data?.seeProfile?.username}</Username>
+            {data?.seeProfile && getButton(data.seeProfile)}
           </Row>
           <Row>
             <List>
@@ -155,7 +299,7 @@ function Profile() {
       </Header>
       <Grid>
         {data?.seeProfile?.photos?.map((photo) => (
-          <Photo bg={photo?.file}>
+          <Photo key={photo?.id} bg={photo?.file}>
             <Icons>
               <Icon>
                 <FontAwesomeIcon icon={faHeart} />

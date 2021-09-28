@@ -74,10 +74,10 @@ function Comments({
       const newComment = {
         __typename: "Comment",
         createdAt: Date.now() + "",
-        id, // mutation 응답으로 가져온 id
-        isMine: true, // 로그인 유저가 쓴 글
-        payload, // form에 적은 내용
-        user: { ...userData.me }, // 로그인 유저 정보
+        id, 
+        isMine: true, 
+        payload, 
+        user: { ...userData.me }, 
       };
       const newCacheComment = cache.writeFragment({
         data: newComment,

@@ -9,7 +9,6 @@ interface SAvatar {
   lg: boolean;
 }
 
-// lg를 props로 내려주어서 사이즈를 변경
 const SAvatar = styled.div<SAvatar>`
   width: ${(props) => (props.lg ? "30px" : "25px")};
   height: ${(props) => (props.lg ? "30px" : "25px")};

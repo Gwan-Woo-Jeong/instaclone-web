@@ -4,7 +4,6 @@ import PageTitle from "../components/PageTitle";
 import { seeFeed } from "../__generated__/seeFeed";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "./fragments";
 
-// ...으로 할당해주고 마지막에 import
 export const FEED_QUERY = gql`
   query seeFeed {
     seeFeed {
