@@ -113,13 +113,13 @@ function Photo({
     }
   };
 
-  const [toggleLikeMutation, { loading }] = useMutation<
-    toggleLike,
-    toggleLikeVariables
-  >(TOGGLE_LIKE_MUTATION, {
-    variables: { id },
-    update: updateToggleLike,
-  });
+  const [toggleLikeMutation] = useMutation<toggleLike, toggleLikeVariables>(
+    TOGGLE_LIKE_MUTATION,
+    {
+      variables: { id },
+      update: updateToggleLike,
+    }
+  );
 
   return (
     <PhotoContainer key={id}>

@@ -16,7 +16,6 @@ function App() {
   const darkMode = useReactiveVar(darkModeVar);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  // /:username => username이라는 변수를 알아들음 ":" 중요
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
